@@ -43,7 +43,7 @@ kpi_card(
 **Optional:**
 - `relative_change` - Show percentage vs absolute change (default: False)
 - `time_series` - pd.Series for chart display
-- `format` - String ('number', 'percentage', 'currency', 'integer') or dict with `type`, `decimals`, `currency`. Currency defaults to € with 2 decimals
+- `format` - String ('number', 'percentage', 'currency', 'integer') or dict with `type`, `decimals`, `currency`. Defaults: 2 decimals, € for currency
 - `chart_type` - 'line', 'bar', or 'area' (default: 'line')
 - `line_color` - Chart line color
 - `show_average` - Show average line on chart
