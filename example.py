@@ -27,7 +27,7 @@ with col1:
         border=True,
         shadow=False,
         background_color="#f8f8f8",
-        format={"type": "number", "decimals": 0},
+        format="integer",
         info_text="Total revenue for the current month compared to the previous month.",
     )
     kpi_card(
@@ -39,7 +39,7 @@ with col1:
         border=True,
         shadow=False,
         background_color="#f8f8f8",
-        format={"type": "number", "decimals": 0},
+        format="integer",
         info_text="Total revenue for the current month compared to the previous month.",
     )
 
@@ -53,7 +53,7 @@ with col2:
         border=True,
         shadow=False,
         background_color="#dbe8ff",
-        format={"type": "number", "decimals": 0},
+        format="integer",
         info_text="Total revenue for the current month compared to the previous month.",
         chart_type='bar',
         line_color="#0022FF",
@@ -82,7 +82,7 @@ with col3:
         border=True,
         shadow=False,
         background_color="#f8f8f8",
-        format={"type": "number", "decimals": 0},
+        format="integer",
         info_text="Total revenue for the current month compared to the previous month.",
         chart_type='area',
     )
@@ -94,7 +94,7 @@ with col3:
         border=True,
         shadow=False,
         background_color="#f8f8f8",
-        format={"type": "number", "decimals": 0},
+        format="integer",
         info_text="Total revenue for the current month compared to the previous month.",
     )
 with col4:
@@ -106,7 +106,7 @@ with col4:
         border=True,
         shadow=False,
         background_color="#f8f8f8",
-        format={"type": "number", "decimals": 0},
+        format="integer",
         info_text="Total revenue for the current month compared to the previous month.",
     )
 
@@ -128,18 +128,24 @@ kpi_card(
     name='Conversion Rate',
     value=14.5,
     value_before=12.0,
-    relative_change=True,  # Show percentage change
+    relative_change=True,
     time_series=time_series,
-    format={"type": "percentage", "decimals": 1}
+    format="percentage"
 )
 
-# Display KPI card with currency formatting
+# Display KPI card with currency formatting (string, defaults to € with 2 decimals)
 kpi_card(
-    name='Revenue',
+    name='Revenue (EUR)',
     value=14500.00,
     value_before=12000.00,
-    relative_change=False,  # Show absolute change
-    time_series=time_series * 1000,
+    format="currency"
+)
+
+# Display KPI card with custom currency (dict)
+kpi_card(
+    name='Revenue (USD)',
+    value=14500.00,
+    value_before=12000.00,
     format={"type": "currency", "decimals": 2, "currency": "$"}
 )
 ```

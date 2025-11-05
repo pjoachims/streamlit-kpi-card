@@ -14,13 +14,27 @@ from streamlit_kpi_card import kpi_card
 # Create sample time series data
 time_series = pd.Series([100, 105, 103, 108, 110, 115, 120])
 
-# Display KPI card with percentage change
+# Minimal usage - format auto-detected from value type
+kpi_card(
+    name='Active Users',
+    value=1250,
+    value_before=1100
+)
+
+# With currency formatting
 kpi_card(
     name='Revenue',
     value=14500.00,
     value_before=12000.00,
-    relative_change=True,  # Show percentage change
     time_series=time_series,
+    format="currency"
+)
+
+# Custom currency
+kpi_card(
+    name='Revenue (USD)',
+    value=14500.00,
+    value_before=12000.00,
     format={"type": "currency", "decimals": 2, "currency": "$"}
 )
 ```
@@ -35,7 +49,7 @@ kpi_card(
 **Optional:**
 - `relative_change` - Show percentage vs absolute change (default: False)
 - `time_series` - pd.Series for chart display
-- `format` - Dict with `type` ('number', 'percentage', 'currency', 'integer'), `decimals`, `currency`
+- `format` - String ('number', 'percentage', 'currency', 'integer') or dict. Auto-detects integer vs number if omitted. Defaults: 2 decimals, € for currency
 - `chart_type` - 'line', 'bar', or 'area' (default: 'line')
 - `line_color` - Chart line color
 - `show_average` - Show average line on chart
