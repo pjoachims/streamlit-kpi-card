@@ -25,7 +25,6 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    "Framework :: Streamlit",
 ]
 dependencies = [
     "streamlit>=1.0.0",
