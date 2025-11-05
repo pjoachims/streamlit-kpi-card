@@ -70,7 +70,8 @@ def kpi_card(
         Format type as string: 'number', 'percentage', 'currency', 'integer'
         Or dict with keys: type, decimals, currency
 
-        Defaults: 2 decimals for all types, '€' for currency
+        If not specified, auto-detects: 'integer' for whole numbers, 'number' for decimals
+        String formats default to 2 decimals, '€' for currency
 
         Examples:
             format="currency"  # Uses 2 decimals and €
@@ -123,7 +124,11 @@ def kpi_card(
     """
     # Handle format parameter
     if format is None:
-        format = {"type": "number", "decimals": 2}
+        # Auto-detect format based on value type
+        if isinstance(value, int) or (isinstance(value, float) and value == int(value)):
+            format = {"type": "integer"}
+        else:
+            format = {"type": "number", "decimals": 2}
     elif isinstance(format, str):
         # Convert string format to dict
         format = {"type": format, "decimals": 2}
