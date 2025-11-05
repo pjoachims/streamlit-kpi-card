@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "streamlit-kpi-card"
-version = "0.1.0"
+version = "0.1.1"
 description = "A beautiful, interactive KPI card component for Streamlit with time series visualization"
 readme = "README.md"
 requires-python = ">=3.7"
