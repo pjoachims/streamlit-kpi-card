@@ -63,27 +63,51 @@ kpi_card(
     value_before=12000.00,
     relative_change=True,  # Show percentage change
     time_series=time_series,
-    format='currency'
+    format={"type": "currency", "decimals": 2, "currency": "$"}
 )
 ```
 
 ## Parameters
 
+### Required Parameters
+
 - **name** (str): The label/name of the KPI
 - **value** (float): The current value
 - **value_before** (float): The previous value for comparison
-- **relative_change** (bool, optional): If True, show percentage change; if False, show absolute difference. Default: False
-- **time_series** (pd.Series, optional): Time series data to display as a chart
-- **format** (str, optional): Format type. Options: 'number', 'percentage', 'currency', 'integer', 'decimal'. Default: 'number'
-- **key** (str, optional): Unique key for the component
 
-## Format Options
+### Optional Parameters
+
+- **relative_change** (bool): If True, show percentage change; if False, show absolute difference. Default: False
+- **time_series** (pd.Series): Time series data to display as a chart
+- **format** (dict): Format configuration with keys:
+  - `type`: Format type - 'number', 'percentage', 'currency', 'integer' (default: 'number')
+  - `decimals`: Number of decimal places (default: 1)
+  - `currency`: Currency symbol like '$', '€', '£' (default: '$')
+- **background_color** (str): Background color of the card. Default: "#ffffff"
+- **border** (str): Border style (CSS border property). Default: "1px solid #e5e7eb"
+- **shadow** (bool): Whether to show shadow on the card. Default: True
+- **border_radius** (str): Border radius for rounded corners. Default: "12px"
+- **line_color** (str): Color of the time series line. If None, uses green/red based on delta
+- **height** (str): Height of the card (CSS height property)
+- **show_average** (bool): Show a dashed horizontal line representing the average value. Default: False
+- **info_text** (str): Info text to display on hover over info icon
+- **is_inverse** (bool): If True, lower values are better (inverts green/red coloring). Default: False
+- **chart_type** (str): Type of chart: 'line', 'bar', or 'area'. Default: 'line'
+- **key** (str): Unique key for the component
+
+## Format Configuration
+
+The `format` parameter accepts a dictionary with the following options:
 
 - **'number'**: Standard number formatting with thousand separators (e.g., 1,234.56)
 - **'percentage'**: Displays value with % symbol (e.g., 14.5%)
-- **'currency'**: Displays value with $ symbol and 2 decimal places (e.g., $1,234.56)
+- **'currency'**: Displays value with currency symbol and specified decimal places (e.g., $1,234.56)
 - **'integer'**: Rounds to whole number (e.g., 1,234)
-- **'decimal'**: Shows 2 decimal places (e.g., 1234.56)
+
+**Example:**
+```python
+format={"type": "currency", "decimals": 2, "currency": "€"}
+```
 
 ## Examples
 
@@ -102,7 +126,7 @@ streamlit run example.py
 ## Project Structure
 
 ```
-streamlit-card/
+streamlit-kpi-card/
 ├── streamlit_kpi_card/
 │   ├── __init__.py              # Python component wrapper
 │   └── frontend/

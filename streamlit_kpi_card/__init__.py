@@ -1,6 +1,16 @@
+"""
+Streamlit KPI Card Component
+
+A beautiful, interactive KPI card component for Streamlit with support for
+time series visualization and delta indicators.
+"""
+
 import os
+from typing import Optional, Dict, Any
 import streamlit.components.v1 as components
 import pandas as pd
+
+__version__ = "0.1.0"
 
 _RELEASE = True
 
@@ -20,70 +30,94 @@ def kpi_card(
     value: float,
     value_before: float,
     relative_change: bool = False,
-    time_series: pd.Series = None,
-    format: dict = None,
+    time_series: Optional[pd.Series] = None,
+    format: Optional[Dict[str, Any]] = None,
     background_color: str = "#ffffff",
     border: str = "1px solid #e5e7eb",
     shadow: bool = True,
     border_radius: str = "12px",
-    line_color: str = None,
-    decimals: int = None,
-    height: str = None,
+    line_color: Optional[str] = None,
+    decimals: Optional[int] = None,
+    height: Optional[str] = None,
     show_average: bool = False,
-    info_text: str = None,
+    info_text: Optional[str] = None,
     is_inverse: bool = False,
     chart_type: str = "line",
-    key: str = None
-):
+    key: Optional[str] = None,
+) -> None:
     """
     Create a KPI card component with name, value, delta, and time series chart.
+
+    This component displays a key performance indicator with:
+    - A prominent value display
+    - Delta indicator (absolute or percentage change)
+    - Optional time series chart (line, bar, or area)
+    - Customizable styling and formatting
 
     Parameters
     ----------
     name : str
-        The name/label of the KPI
+        The name/label of the KPI.
     value : float
-        The current value
+        The current value to display.
     value_before : float
-        The previous value for comparison
+        The previous value for comparison (to calculate delta).
     relative_change : bool, default False
         If True, show percentage change. If False, show absolute difference.
     time_series : pd.Series, optional
-        Time series data to display as a chart
+        Time series data to display as a chart.
     format : dict, optional
         Format configuration dict with keys:
         - type: 'number', 'percentage', 'currency', 'integer' (default: 'number')
         - decimals: number of decimal places (default: 1)
         - currency: currency symbol like '$', '€', '£' (default: '$')
+
         Example: {"type": "currency", "decimals": 2, "currency": "€"}
     background_color : str, default "#ffffff"
-        Background color of the card
-    border : str, optional, default "1px solid #e5e7eb"
+        Background color of the card (CSS color).
+    border : str, default "1px solid #e5e7eb"
         Border style (CSS border property). Set to None or "" for no border.
     shadow : bool, default True
-        Whether to show shadow on the card
+        Whether to show shadow on the card.
     border_radius : str, default "12px"
-        Border radius (rounded corners)
+        Border radius for rounded corners (CSS border-radius).
     line_color : str, optional
-        Color of the time series line. If None, uses green/red based on delta.
+        Color of the time series line. If None, uses green for positive/red for negative delta.
     decimals : int, optional
-        DEPRECATED: Use format dict instead. Number of decimal places.
+        **DEPRECATED**: Use format dict instead. Number of decimal places.
     height : str, optional
         Height of the card (CSS height property). If None, height is auto.
     show_average : bool, default False
-        Show a dashed horizontal line representing the average value
+        Show a dashed horizontal line representing the average value in the time series.
     info_text : str, optional
         Info text to display on hover over info icon. Icon only shows if text provided.
     is_inverse : bool, default False
-        If True, lower values are better (inverts green/red coloring)
+        If True, lower values are better (inverts green/red coloring for delta).
     chart_type : str, default "line"
-        Type of chart: 'line', 'bar', or 'area'
+        Type of chart to display: 'line', 'bar', or 'area'.
     key : str, optional
-        Unique key for the component
+        Unique key for the component to enable multiple instances.
 
     Returns
     -------
     None
+        This component does not return a value.
+
+    Examples
+    --------
+    Basic usage with currency formatting:
+
+    >>> import pandas as pd
+    >>> from streamlit_kpi_card import kpi_card
+    >>> time_series = pd.Series([100, 105, 103, 108, 110])
+    >>> kpi_card(
+    ...     name="Revenue",
+    ...     value=14500.00,
+    ...     value_before=12000.00,
+    ...     relative_change=True,
+    ...     time_series=time_series,
+    ...     format={"type": "currency", "decimals": 2, "currency": "$"}
+    ... )
     """
     # Handle format parameter
     if format is None:
@@ -143,4 +177,4 @@ def kpi_card(
     return component_value
 
 
-__all__ = ["kpi_card"]
+__all__ = ["kpi_card", "__version__"]
