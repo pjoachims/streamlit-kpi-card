@@ -112,7 +112,10 @@ with col4:
 
 
 st.markdown("""
-Usage Example
+---
+
+## Usage Example
+
 ```python
 from streamlit_kpi_card import kpi_card
 import pandas as pd
@@ -120,14 +123,24 @@ import pandas as pd
 # Create a time series
 time_series = pd.Series([10, 12, 11, 15, 14, 16, 18])
 
-# Display KPI card
+# Display KPI card with percentage formatting
 kpi_card(
-    name='Revenue',
+    name='Conversion Rate',
     value=14.5,
     value_before=12.0,
     relative_change=True,  # Show percentage change
     time_series=time_series,
-    format='percentage'
+    format={"type": "percentage", "decimals": 1}
+)
+
+# Display KPI card with currency formatting
+kpi_card(
+    name='Revenue',
+    value=14500.00,
+    value_before=12000.00,
+    relative_change=False,  # Show absolute change
+    time_series=time_series * 1000,
+    format={"type": "currency", "decimals": 2, "currency": "$"}
 )
 ```
 """)
