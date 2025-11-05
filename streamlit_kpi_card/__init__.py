@@ -6,7 +6,7 @@ time series visualization and delta indicators.
 """
 
 import os
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 import streamlit.components.v1 as components
 import pandas as pd
 
@@ -31,7 +31,7 @@ def kpi_card(
     value_before: float,
     relative_change: bool = False,
     time_series: Optional[pd.Series] = None,
-    format: Optional[Dict[str, Any]] = None,
+    format: Optional[Union[str, Dict[str, Any]]] = None,
     background_color: str = "#ffffff",
     border: str = "1px solid #e5e7eb",
     shadow: bool = True,
@@ -66,13 +66,13 @@ def kpi_card(
         If True, show percentage change. If False, show absolute difference.
     time_series : pd.Series, optional
         Time series data to display as a chart.
-    format : dict, optional
-        Format configuration dict with keys:
-        - type: 'number', 'percentage', 'currency', 'integer' (default: 'number')
-        - decimals: number of decimal places (default: 1)
-        - currency: currency symbol like '$', '€', '£' (default: '$')
+    format : str or dict, optional
+        Format type as string: 'number', 'percentage', 'currency', 'integer'
+        Or dict with keys: type, decimals, currency
 
-        Example: {"type": "currency", "decimals": 2, "currency": "€"}
+        Examples:
+            format="currency"
+            format={"type": "currency", "decimals": 2, "currency": "€"}
     background_color : str, default "#ffffff"
         Background color of the card (CSS color).
     border : str, default "1px solid #e5e7eb"
@@ -116,12 +116,15 @@ def kpi_card(
     ...     value_before=12000.00,
     ...     relative_change=True,
     ...     time_series=time_series,
-    ...     format={"type": "currency", "decimals": 2, "currency": "$"}
+    ...     format="currency"
     ... )
     """
     # Handle format parameter
     if format is None:
         format = {"type": "number", "decimals": 1, "currency": "$"}
+    elif isinstance(format, str):
+        # Convert string format to dict
+        format = {"type": format, "decimals": 1, "currency": "$"}
     else:
         # Ensure all required keys exist with defaults
         format = {
