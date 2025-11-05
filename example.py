@@ -133,9 +133,9 @@ kpi_card(
     format="percentage"
 )
 
-# Display KPI card with currency formatting (string)
+# Display KPI card with currency formatting (string, defaults to € with 2 decimals)
 kpi_card(
-    name='Revenue',
+    name='Revenue (EUR)',
     value=14500.00,
     value_before=12000.00,
     format="currency"
@@ -143,10 +143,10 @@ kpi_card(
 
 # Display KPI card with custom currency (dict)
 kpi_card(
-    name='Revenue (EUR)',
+    name='Revenue (USD)',
     value=14500.00,
     value_before=12000.00,
-    format={"type": "currency", "decimals": 0, "currency": "€"}
+    format={"type": "currency", "decimals": 2, "currency": "$"}
 )
 ```
 """)

@@ -70,9 +70,12 @@ def kpi_card(
         Format type as string: 'number', 'percentage', 'currency', 'integer'
         Or dict with keys: type, decimals, currency
 
+        Defaults: 'currency' uses 2 decimals and '€' symbol
+                  Other types use 1 decimal
+
         Examples:
-            format="currency"
-            format={"type": "currency", "decimals": 2, "currency": "€"}
+            format="currency"  # Uses 2 decimals and €
+            format={"type": "currency", "decimals": 0, "currency": "$"}
     background_color : str, default "#ffffff"
         Background color of the card (CSS color).
     border : str, default "1px solid #e5e7eb"
@@ -124,18 +127,20 @@ def kpi_card(
         format = {"type": "number", "decimals": 1}
     elif isinstance(format, str):
         # Convert string format to dict
-        format = {"type": format, "decimals": 1}
+        default_decimals = 2 if format == "currency" else 1
+        format = {"type": format, "decimals": default_decimals}
         if format["type"] == "currency":
-            format["currency"] = "$"
+            format["currency"] = "€"
     else:
         # Ensure all required keys exist with defaults
         format_type = format.get("type", "number")
+        default_decimals = 2 if format_type == "currency" else 1
         format = {
             "type": format_type,
-            "decimals": format.get("decimals", 1)
+            "decimals": format.get("decimals", default_decimals)
         }
         if format_type == "currency":
-            format["currency"] = format.get("currency", "$")
+            format["currency"] = format.get("currency", "€")
 
     # Backward compatibility: if decimals parameter is provided, override format decimals
     if decimals is not None:
