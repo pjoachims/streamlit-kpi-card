@@ -2,6 +2,8 @@
 
 A beautiful, interactive KPI card component for Streamlit with support for time series visualization and delta indicators.
 
+![Example KPI Cards](example.png)
+
 ## Features
 
 - **Clean Design**: Modern card layout with shadows and borders
