@@ -121,17 +121,21 @@ def kpi_card(
     """
     # Handle format parameter
     if format is None:
-        format = {"type": "number", "decimals": 1, "currency": "$"}
+        format = {"type": "number", "decimals": 1}
     elif isinstance(format, str):
         # Convert string format to dict
-        format = {"type": format, "decimals": 1, "currency": "$"}
+        format = {"type": format, "decimals": 1}
+        if format["type"] == "currency":
+            format["currency"] = "$"
     else:
         # Ensure all required keys exist with defaults
+        format_type = format.get("type", "number")
         format = {
-            "type": format.get("type", "number"),
-            "decimals": format.get("decimals", 1),
-            "currency": format.get("currency", "$")
+            "type": format_type,
+            "decimals": format.get("decimals", 1)
         }
+        if format_type == "currency":
+            format["currency"] = format.get("currency", "$")
 
     # Backward compatibility: if decimals parameter is provided, override format decimals
     if decimals is not None:
