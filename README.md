@@ -2,7 +2,7 @@
 
 KPI card component for Streamlit with time series charts and delta indicators.
 
-![Example KPI Cards](example.png)
+![Example KPI Cards](https://raw.githubusercontent.com/pjoachims/streamlit-kpi-card/main/example.png)
 
 ## Usage
 
