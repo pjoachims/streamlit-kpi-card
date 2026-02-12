@@ -1,152 +1,123 @@
+"""Example usage of streamlit-kpi-card."""
 import streamlit as st
 import pandas as pd
 import numpy as np
-from streamlit_kpi_card import kpi_card
+from streamlit_kpi_card import kpi_card, kpi_cards
 
 st.set_page_config(page_title="KPI Card Examples", layout="wide")
+st.title("Streamlit KPI Card")
 
-st.title("🎯 KPI Card Component Examples")
+# Sample data
+np.random.seed(42)
+ts_up = pd.Series(np.cumsum(np.random.randn(20)) + 100, index=[f"W{i}" for i in range(1, 21)])
+ts_down = pd.Series(np.cumsum(np.random.randn(20) - 0.3) + 50, index=[f"W{i}" for i in range(1, 21)])
+ts_short = pd.Series([10, 12, 11, 15, 14])
 
-# Generate sample time series data
-dates = pd.date_range(start='2024-01-01', periods=30, freq='D')
-revenue_series = pd.Series(np.random.randn(30).cumsum() * 100 + 100, index=dates)
-conversion_series = pd.Series(np.random.randn(30).cumsum() + 15, index=dates)
-users_series = pd.Series(np.random.randn(30).cumsum() + 1000, index=dates)
+# --- Row 1: Basic Examples ---
+st.subheader("Basic Examples")
+cols = st.columns(4)
+with cols[0]:
+    kpi_card(name="Percentage", value=87.5, value_before=82.3, format="percentage", time_series=ts_up)
+with cols[1]:
+    kpi_card(name="Revenue", value=142500, value_before=128000, layout="horizontal", format="currency", time_series=ts_up)
+with cols[2]:
+    kpi_card(name="CPU Usage", value=67.3, value_before=72.1, layout="chart-focus",
+             chart_style={"type": "line"}, format="percentage", time_series=ts_down, is_inverse=True)
+with cols[3]:
+    kpi_card(name="Bar Focus Last 5", value=150, value_before=130, format="integer", time_series=ts_up,
+             chart_style={"type": "rounded-bar", "focusLastN": 5})
 
-# Create columns for layout
-col1, col2, col3, col4, col5 = st.columns([4, 4, 4, 2, 15])
+# --- Row 2: Compact & Spacious ---
+st.subheader("Compact & Spacious")
+cols = st.columns(4)
+for i, (n, v, vb) in enumerate([("Rev", 14500, 13000), ("Users", 8200, 7800), ("Orders", 520, 490), ("ARPU", 42.5, 40.1)]):
+    with cols[i]:
+        kpi_card(name=n, value=v, value_before=vb, layout="compact", time_series=ts_short,
+                 format="integer" if isinstance(v, int) else "number")
 
+cols = st.columns(2)
+with cols[0]:
+    kpi_card(name="Spacious (24px)", value=100, value_before=90, format="integer", time_series=ts_short,
+             card_style={"padding": "24px"})
+with cols[1]:
+    kpi_card(name="Stack: horizontal", value=1500, value_before=1200,
+             delta_style={"stack": "horizontal"}, format="integer",
+             extra_deltas=[{"value_before": 1000, "label": "vs target"}, {"value_before": 1100, "label": "vs budget"}])
 
-with col1:
+# --- Row 3: Style Showcase ---
+st.subheader("Style Showcase")
+cols = st.columns(3)
+with cols[0]:
     kpi_card(
-        name="Positive change -> green change/line",
-        value=6000,
-        value_before=5000,
-        relative_change=False,
-        time_series=revenue_series,
-        border=True,
-        shadow=False,
-        background_color="#f8f8f8",
-        format="integer",
-        info_text="Total revenue for the current month compared to the previous month.",
+        name="Glass Card", value=3420, value_before=3100, format="integer", time_series=ts_up,
+        card_style={
+            "padding": "16px 20px",
+            "borderRadius": "12px",
+            "border": "none",
+            "shadow": "glow",
+            "accentColor": "#8b5cf6",
+            "backgroundStyle": "glass",
+        },
+        chart_style={"type": "line", "lineColor": "#8b5cf6"},
+        delta_style={"format": "badge"},
     )
+with cols[1]:
     kpi_card(
-        name="Negative change -> red change/line. Relative change (click on it ;)",
-        value=5000,
-        value_before=6000,
-        relative_change=True,
-        time_series=-1*revenue_series,
-        border=True,
-        shadow=False,
-        background_color="#f8f8f8",
-        format="integer",
-        info_text="Total revenue for the current month compared to the previous month.",
+        name="Sharp Modern", value=520, value_before=490, format="integer", time_series=ts_short,
+        card_style={
+            "padding": "20px",
+            "borderRadius": "0px",
+            "border": "top-accent",
+            "accentColor": "#f59e0b",
+            "shadow": "sharp",
+            "backgroundStyle": "solid",
+        },
+        chart_style={"type": "rounded-bar", "focusLastN": 3},
+        delta_style={"format": "inline"},
     )
-
-with col2:
+with cols[2]:
     kpi_card(
-        name="bar chart and some colors",
-        value=1000,
-        value_before=900,
-        relative_change=False,
-        time_series=revenue_series,
-        border=True,
-        shadow=False,
-        background_color="#dbe8ff",
-        format="integer",
-        info_text="Total revenue for the current month compared to the previous month.",
-        chart_type='bar',
-        line_color="#0022FF",
-    )
-    kpi_card(
-        name="Show average line, show as currency",
-        value=1000,
-        value_before=900,
-        relative_change=False,
-        time_series=revenue_series,
-        border=True,
-        shadow=False,
-        background_color="#f8f8f8",
-        format={"type": "currency", "decimals": 0, "currency": "€"},
-        info_text="Total revenue for the current month compared to the previous month.",
-        chart_type='bar',
-        show_average=True,
-    )
-with col3:
-    kpi_card(
-        name="show as area, values as percentage",
-        value=6000,
-        value_before=5000,
-        relative_change=False,
-        time_series=revenue_series,
-        border=True,
-        shadow=False,
-        background_color="#f8f8f8",
-        format="integer",
-        info_text="Total revenue for the current month compared to the previous month.",
-        chart_type='area',
-    )
-    kpi_card(
-        name="just value and delta",
-        value=6000,
-        value_before=5000,
-        relative_change=False,
-        border=True,
-        shadow=False,
-        background_color="#f8f8f8",
-        format="integer",
-        info_text="Total revenue for the current month compared to the previous month.",
-    )
-with col4:
-    kpi_card(
-        name="Smoll",
-        value=6000,
-        value_before=5000,
-        relative_change=False,
-        border=True,
-        shadow=False,
-        background_color="#f8f8f8",
-        format="integer",
-        info_text="Total revenue for the current month compared to the previous month.",
+        name="BOLD CAPS", value=789, value_before=654, format="integer", time_series=ts_short,
+        card_style={"padding": "16px", "border": "top-accent", "accentColor": "#000", "shadow": "sharp"},
+        text_style={"nameSize": "14px", "nameWeight": 900, "nameColor": "#000", "valueWeight": 400, "valueColor": "#525252"},
+        delta_style={"format": "badge"},
     )
 
-
-st.markdown("""
----
-
-## Usage Example
-
-```python
-from streamlit_kpi_card import kpi_card
-import pandas as pd
-
-# Create a time series
-time_series = pd.Series([10, 12, 11, 15, 14, 16, 18])
-
-# Display KPI card with percentage formatting
-kpi_card(
-    name='Conversion Rate',
-    value=14.5,
-    value_before=12.0,
-    relative_change=True,
-    time_series=time_series,
-    format="percentage"
-)
-
-# Display KPI card with currency formatting (string, defaults to € with 2 decimals)
-kpi_card(
-    name='Revenue (EUR)',
-    value=14500.00,
-    value_before=12000.00,
-    format="currency"
-)
-
-# Display KPI card with custom currency (dict)
-kpi_card(
-    name='Revenue (USD)',
-    value=14500.00,
-    value_before=12000.00,
-    format={"type": "currency", "decimals": 2, "currency": "$"}
-)
-```
-""")
+# --- Row 4: Dark Theme ---
+st.subheader("Dark Theme")
+cols = st.columns(3)
+with cols[0]:
+    kpi_card(
+        name="Neon Glow", value=1847, value_before=1520, format="integer", time_series=ts_up,
+        card_style={
+            "padding": "18px",
+            "borderRadius": "12px",
+            "border": "full",
+            "accentColor": "#06b6d4",
+            "shadow": "glow",
+            "backgroundStyle": "solid",
+        },
+        chart_style={"type": "gradient-area", "lineColor": "#06b6d4"},
+        text_style={"nameColor": "#06b6d4", "nameWeight": 600},
+        delta_style={"format": "badge", "label": ""},
+    )
+with cols[1]:
+    kpi_card(
+        name="Accent Strip", value=42500, value_before=38000, format="currency", time_series=ts_up,
+        card_style={
+            "padding": "16px 20px",
+            "borderRadius": "8px",
+            "border": "left-accent",
+            "accentColor": "#f43f5e",
+            "shadow": "subtle",
+            "backgroundStyle": "gradient",
+        },
+        chart_style={"type": "sparkline-dot", "lineColor": "#f43f5e"},
+        text_style={"millify": True},
+        delta_style={"format": "pill", "label": "MoM"},
+        theme="dark",
+    )
+with cols[2]:
+    kpi_card(name="Stack: vertical", value=1500, value_before=1200,
+             delta_style={"stack": "vertical"}, format="integer",
+             extra_deltas=[{"value_before": 1000, "label": "vs target"}, {"value_before": 1100, "label": "vs budget"}])
