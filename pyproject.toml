@@ -36,6 +36,12 @@ Homepage = "https://github.com/pjoachims/streamlit-kpi-card"
 Repository = "https://github.com/pjoachims/streamlit-kpi-card"
 Issues = "https://github.com/pjoachims/streamlit-kpi-card/issues"
 
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.setuptools]
 packages = ["streamlit_kpi_card"]
 include-package-data = true
