@@ -46,5 +46,8 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Note: We DON'T ignore streamlit_kpi_card/frontend/build/
-# because it needs to be committed for PyPI distribution
+# Playwright MCP
+.playwright-mcp/
+
+# Root node_modules
+node_modules/
